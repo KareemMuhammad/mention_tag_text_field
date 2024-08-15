@@ -105,8 +105,10 @@ class MentionTagTextEditingController extends TextEditingController {
     Object? data,
     Widget? stylingWidget,
   }) {
+    /// fixed mention insertion: take default tag if input is null
     final indexCursor = selection.base.offset;
-    final mentionSymbol = _mentionInput!.first;
+    final mentionSymbol = _mentionInput?.first ??
+        mentionTagDecoration.mentionStart.first;
 
     final mention = mentionTagDecoration.showMentionStartSymbol
         ? "$mentionSymbol$label"
@@ -121,7 +123,8 @@ class MentionTagTextEditingController extends TextEditingController {
     final indexPosition = textPart.countChar(Constants.mentionEscape);
     _mentions.insert(indexPosition, mentionTagElement);
 
-    _replaceLastSubstringWithEscaping(indexCursor, _mentionInput!);
+    _replaceLastSubstringWithEscaping(indexCursor, _mentionInput ??
+        mentionTagDecoration.mentionStart.first);
   }
 
   void _replaceLastSubstringWithEscaping(int indexCursor, String replacement) {
